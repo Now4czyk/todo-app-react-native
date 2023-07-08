@@ -1,56 +1,54 @@
-import {View} from "react-native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Colors } from "../constants/colors";
+import { HomeScreen, LoginScreen, SignupScreen } from "../screens";
+import { StatusBar, StyleSheet, View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
-
-function AuthStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: 'red' },
-        headerTintColor: 'white',
-        contentStyle: { backgroundColor: 'blue' },
+const AuthStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen
+      options={{
+        contentStyle: {
+          backgroundColor: "white",
+        },
       }}
-    >
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignupScreen} />
-    </Stack.Navigator>
-  );
-}
+      name="Login"
+      component={LoginScreen}
+    />
+    <Stack.Screen name="Signup" component={SignupScreen} />
+  </Stack.Navigator>
+);
 
-function AuthenticatedStack() {
-  const authCtx = useContext(AuthContext);
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary500 },
-        headerTintColor: 'white',
-        contentStyle: { backgroundColor: Colors.primary100 },
-      }}
-    >
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logout}
-            />
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
+const AuthenticatedStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: Colors.primary500 },
+      headerTintColor: "white",
+      contentStyle: { backgroundColor: Colors.primary100 },
+    }}
+  >
+    <Stack.Screen name="Welcome" component={HomeScreen} />
+  </Stack.Navigator>
+);
 
 export const Navigation = () => {
-  return (
-    <View>
+  const isAuthenticated = false;
 
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      {isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
