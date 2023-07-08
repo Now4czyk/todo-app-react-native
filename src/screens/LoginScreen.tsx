@@ -1,8 +1,12 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../navigation/Navigation";
 
-export const LoginScreen = () => {
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
+
+export const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,11 +35,26 @@ export const LoginScreen = () => {
         />
         <Button title="Login" onPress={() => {}} />
       </View>
+      <Pressable
+        style={({ pressed }) => pressed && styles.pressed}
+        onPress={() => navigation.navigate("SingUp")}
+      >
+        <Text style={styles.signupText}>Sign up</Text>
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    textAlign: "center",
+    opacity: 0.2,
+  },
+  signupText: {
+    marginTop: 20,
+    fontSize: 17,
+    textAlign: "center",
+  },
   title: {
     fontSize: 50,
     fontWeight: "600",

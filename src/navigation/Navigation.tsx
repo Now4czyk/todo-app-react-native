@@ -1,9 +1,15 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Colors } from "../constants/colors";
-import { HomeScreen, LoginScreen, SignupScreen } from "../screens";
+import { HomeScreen, LoginScreen, SignUpScreen } from "../screens";
 import { StatusBar, StyleSheet, View } from "react-native";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Login: undefined;
+  SingUp: undefined;
+  Welcome: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AuthStack = () => (
   <Stack.Navigator
@@ -20,7 +26,7 @@ const AuthStack = () => (
       name="Login"
       component={LoginScreen}
     />
-    <Stack.Screen name="Signup" component={SignupScreen} />
+    <Stack.Screen name="SingUp" component={SignUpScreen} />
   </Stack.Navigator>
 );
 
