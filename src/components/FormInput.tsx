@@ -5,6 +5,9 @@ import {
   GlobalError,
   DeepRequired,
   FieldErrorsImpl,
+  UseFormRegister,
+  UseFormRegisterReturn,
+  RegisterOptions,
 } from "react-hook-form";
 import { StyleSheet, Text, TextInput, TextInputProps } from "react-native";
 
@@ -15,6 +18,8 @@ interface FormInputProps {
   };
   placeholder: string;
   name: string;
+  register: UseFormRegister<any>;
+  registerOptions?: RegisterOptions<any, string>;
   required?: boolean;
   errorMessage?: string;
   textInputProps?: TextInputProps;
@@ -26,7 +31,9 @@ export const FormInput = ({
   errors,
   style,
   name,
+  register,
   placeholder,
+  registerOptions,
   textInputProps,
   required = true,
   errorMessage = "This field is required",
@@ -44,12 +51,13 @@ export const FormInput = ({
           onChangeText={onChange}
           value={value}
           style={[styles.input, style]}
+          {...register(name, registerOptions)}
           {...textInputProps}
         />
       )}
       name={name}
     />
-    {errors.email && <Text>{errorMessage}</Text>}
+    <Text>{errors[name]?.message.toString()}</Text>
   </>
 );
 

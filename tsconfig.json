@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "esnext"
+    "module": "esnext",
+    "typeRoots": ["./src/types"]
   },
   "extends": "expo/tsconfig.base",
   "include": ["src/**/*"],

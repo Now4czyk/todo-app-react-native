@@ -4,7 +4,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/Navigation";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
-import { getStorageData, setStorageData } from "../utils/storage";
+import { setStorageData } from "../utils/storage";
+import axios from "axios";
+import { useCallback } from "react";
+
 interface LoginScreenProps
   extends NativeStackScreenProps<RootStackParamList, "Login"> {
   isLoginScreen?: boolean;
@@ -15,16 +18,31 @@ export const AuthScreen = ({ navigation, isLoginScreen }: LoginScreenProps) => {
     control,
     handleSubmit,
     formState: { errors },
+    register,
   } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
   });
-  const onSubmit = (data) =>
-    isLoginScreen
-      ? setStorageData({ id: "token", value: data.email })
-      : getStorageData({ id: "token" });
+
+  const onSubmit = useCallback(
+    async (data: { email: string; password: string }) => {
+      const payload = {
+        email: data.email,
+        password: data.password,
+        returnSecureToken: true,
+      };
+      const url = `https://identitytoolkit.googleapis.com/v1/accounts:${
+        isLoginScreen ? "signInWithPassword" : "signUp"
+      }?key=AIzaSyDCxFiPhUGuuy7y_OBuOS2j2OQihmtRWw0`;
+
+      const response = await axios.post(url, payload);
+
+      await setStorageData("token", response.data.idToken);
+    },
+    [isLoginScreen],
+  );
 
   return (
     <View style={styles.container}>
@@ -37,9 +55,17 @@ export const AuthScreen = ({ navigation, isLoginScreen }: LoginScreenProps) => {
       <View style={styles.form}>
         <FormInput
           control={control}
+          register={register}
           errors={errors}
           name="email"
           placeholder="Email"
+          registerOptions={{
+            validate: {
+              matchPattern: (v) =>
+                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                "Email address must be a valid address",
+            },
+          }}
           textInputProps={{
             placeholderTextColor: "lightgrey",
             autoComplete: "email",
@@ -47,10 +73,12 @@ export const AuthScreen = ({ navigation, isLoginScreen }: LoginScreenProps) => {
           }}
         />
         <FormInput
+          register={register}
           control={control}
           errors={errors}
           name="password"
           placeholder="Password"
+          registerOptions={{ minLength: 6 }}
           textInputProps={{
             placeholderTextColor: "lightgrey",
             autoComplete: "password",
