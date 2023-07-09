@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Colors } from "../constants/colors";
-import { HomeScreen, LoginScreen, SignUpScreen } from "../screens";
+import { AuthScreen, HomeScreen } from "../screens";
 import { StatusBar, StyleSheet, View } from "react-native";
 
 export type RootStackParamList = {
@@ -24,9 +24,10 @@ const AuthStack = () => (
         },
       }}
       name="Login"
-      component={LoginScreen}
-    />
-    <Stack.Screen name="SingUp" component={SignUpScreen} />
+    >
+      {(props) => <AuthScreen {...props} isLoginScreen={true} />}
+    </Stack.Screen>
+    <Stack.Screen name="SingUp" component={AuthScreen} />
   </Stack.Navigator>
 );
 
