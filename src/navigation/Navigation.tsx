@@ -1,10 +1,14 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Colors } from "../constants/colors";
-import { AuthScreen, HomeScreen } from "../screens";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { getStorageData } from "../utils/storage";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Colors } from '../constants/colors';
+import { AuthScreen, HomeScreen } from '../screens';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { getStorageData } from '../utils/storage';
+import { AuthContext } from '../store/auth-store';
+import { useContext } from 'react';
+import ActiveTodosScreen from '../screens/ActiveTodosScreen';
+import ArchivedTodosScreen from '../screens/ArchivedTodosScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -17,34 +21,42 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const { logout } = useContext(AuthContext);
+
   return (
     <Drawer.Navigator
       screenOptions={{
-        title: "All Categories",
-        headerStyle: { backgroundColor: "lightblue" },
-        headerTintColor: "black",
+        title: 'Todos',
+        headerStyle: { backgroundColor: 'lightblue' },
+        headerTintColor: 'black',
         drawerContentStyle: {
-          backgroundColor: "white",
+          backgroundColor: 'white',
         },
-        drawerInactiveTintColor: "white",
-        drawerActiveTintColor: "#ec8a6a",
+        drawerActiveTintColor: '#ec8a6a', drawerIcon: ({ color, size }) => (
+          <Ionicons name='list' size={size} color={color} />
+        ),
+        headerRight: () => (
+          <Ionicons
+            name='exit-outline'
+            size={24}
+            onPress={logout}
+            style={styles.exitIcon}
+          />
+        ),
       }}
     >
       <Drawer.Screen
-        name="Categories"
-        component={() => <Text>dummy content</Text>}
+        name='Active todos'
+        component={ActiveTodosScreen}
         options={{
-          title: "All Categories",
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
-          ),
-          headerRight: () => (
-            <Ionicons
-              name="settings-outline"
-              size={24}
-              style={styles.settingsIcon}
-            />
-          ),
+          title: 'Active todos',
+        }}
+      />
+      <Drawer.Screen
+        name='Archived todos'
+        component={ArchivedTodosScreen}
+        options={{
+          title: 'Archived todos',
         }}
       />
     </Drawer.Navigator>
@@ -57,7 +69,7 @@ const AuthenticatedStack = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen name="Welcome" component={DrawerNavigator} />
+    <Stack.Screen name='Welcome' component={DrawerNavigator} />
   </Stack.Navigator>
 );
 
@@ -70,23 +82,23 @@ const AuthStack = () => (
     <Stack.Screen
       options={{
         contentStyle: {
-          backgroundColor: "white",
+          backgroundColor: 'white',
         },
       }}
-      name="Login"
+      name='Login'
     >
       {(props) => <AuthScreen {...props} isLoginScreen={true} />}
     </Stack.Screen>
-    <Stack.Screen name="SingUp" component={AuthScreen} />
+    <Stack.Screen name='SingUp' component={AuthScreen} />
   </Stack.Navigator>
 );
 
 export const Navigation = () => {
-  const isAuthenticated = getStorageData("token");
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='dark-content' />
       {!!isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
     </View>
   );
@@ -96,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  settingsIcon: {
+  exitIcon: {
     marginRight: 20,
   },
 });
