@@ -1,21 +1,19 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getStorageData = async (id: string) => {
   try {
-    const value = await AsyncStorage.getItem(id);
-    // console.log(`Storage field ${id} read successfully`, value);
-    return value;
+    return await AsyncStorage.getItem(id);
   } catch (e) {
-    console.log(`Error occurred while reading storage field ${id}`, e);
+    console.log(`Error occurred while reading storage field ${id}`);
   }
 };
 
 export const setStorageData = async (id: string, value: string) => {
   try {
     await AsyncStorage.setItem(id, value);
-    console.log(`Storage field ${id} set successfully`, value);
+    console.log(`Storage field ${id} set successfully`);
   } catch (e) {
-    console.log(`Error occurred while setting storage field ${id}`, e);
+    console.log(`Error occurred while setting storage field ${id}`);
   }
 };
 
@@ -24,6 +22,6 @@ export const removeStorageData = async (id: string) => {
     await AsyncStorage.removeItem(id);
     console.log(`Storage field ${id} removed successfully`);
   } catch (e) {
-    console.log(`Error occurred while removing storage field ${id}`, e);
+    console.log(`Error occurred while removing storage field ${id}`);
   }
 };
