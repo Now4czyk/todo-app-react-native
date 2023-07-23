@@ -107,7 +107,7 @@ export const AuthScreen = ({ navigation, isLoginScreen }: LoginScreenProps) => {
         style={({ pressed }) => pressed && styles.pressed}
         onPress={() => navigation.navigate(isLoginScreen ? 'SingUp' : 'Login')}
       >
-        <Text style={styles.signupText}>
+        <Text style={styles.submitText}>
           {isLoginScreen ? 'Sign up' : 'Log in'}
         </Text>
       </Pressable>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     opacity: 0.2,
   },
-  signupText: {
+  submitText: {
     marginTop: 20,
     fontSize: 17,
     textAlign: 'center',
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
   },
-
   container: {
     flex: 1,
     margin: 50,
@@ -145,3 +144,4 @@ const styles = StyleSheet.create({
     height: 200,
   },
 });
+

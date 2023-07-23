@@ -1,16 +1,17 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/Navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export const Task = () => {
-  const { navigate } = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  return <Pressable onPress={() => navigate('TodoDetails')} style={styles.taskContainer}>
+  return <Pressable onPress={() => navigation.navigate('TodoDetails')}
+                    style={styles.taskContainer}>
     <Text style={styles.title}>Learn for math</Text>
     <Image
       style={styles.image}
       source={{ uri: 'https://media.os.fressnapf.com/cms/2020/04/Ratgeber-Rassenportrait-Mops_1200x527.jpg?t=cmsimg_920&f=webp' }} />
-    <Text style={styles.localization}>Localization:</Text>
-    <Text style={styles.date}>Date:</Text>
   </Pressable>;
 };
 const styles = StyleSheet.create({
@@ -36,11 +37,5 @@ const styles = StyleSheet.create({
     minHeight: 200,
     borderRadius: 5,
     marginVertical: 15,
-  },
-  localization: {
-    fontSize: 16,
-  },
-  date: {
-    fontSize: 16,
   },
 });

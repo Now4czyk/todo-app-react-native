@@ -13,12 +13,14 @@ export type RootStackParamList = {
   Login: undefined;
   SingUp: undefined;
   Todos: undefined;
-  TodoDetails: undefined;
+  TodoDetails: { id: string };
+  ActiveTodos: undefined;
+  ArchivedTodos: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<RootStackParamList>();
 
 const DrawerNavigator = () => {
   const { logout } = useContext(AuthContext);
@@ -46,14 +48,14 @@ const DrawerNavigator = () => {
       }}
     >
       <Drawer.Screen
-        name='Active todos'
+        name='ActiveTodos'
         component={ActiveTodosScreen}
         options={{
           title: 'Active todos',
         }}
       />
       <Drawer.Screen
-        name='Archived todos'
+        name='ArchivedTodos'
         component={ArchivedTodosScreen}
         options={{
           title: 'Archived todos',
@@ -70,7 +72,17 @@ const AuthenticatedStack = () => (
     }}
   >
     <Stack.Screen name='Todos' component={DrawerNavigator} />
-    <Stack.Screen name='TodoDetails' component={TaskDetails} />
+    <Stack.Screen name='TodoDetails'
+                  options={{
+                    headerShown: true,
+                    title: 'Details',
+                    headerStyle: { backgroundColor: 'lightblue' },
+                    headerTintColor: 'black',
+                    contentStyle: {
+                      backgroundColor: 'white',
+                    },
+                  }}
+                  component={TaskDetails} />
   </Stack.Navigator>
 );
 
