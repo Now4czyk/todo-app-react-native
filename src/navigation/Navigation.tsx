@@ -1,19 +1,19 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Colors } from '../constants/colors';
-import { AuthScreen, HomeScreen } from '../screens';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { AuthScreen } from '../screens';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getStorageData } from '../utils/storage';
 import { AuthContext } from '../store/auth-store';
 import { useContext } from 'react';
 import ActiveTodosScreen from '../screens/ActiveTodosScreen';
 import ArchivedTodosScreen from '../screens/ArchivedTodosScreen';
+import { TaskDetails } from '../components/TaskDetails';
 
 export type RootStackParamList = {
   Login: undefined;
   SingUp: undefined;
-  Welcome: undefined;
+  Todos: undefined;
+  TodoDetails: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -69,7 +69,8 @@ const AuthenticatedStack = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen name='Welcome' component={DrawerNavigator} />
+    <Stack.Screen name='Todos' component={DrawerNavigator} />
+    <Stack.Screen name='TodoDetails' component={TaskDetails} />
   </Stack.Navigator>
 );
 

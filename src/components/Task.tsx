@@ -1,14 +1,17 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export const Task = () => {
-  return <View style={styles.taskContainer}>
+  const { navigate } = useNavigation();
+
+  return <Pressable onPress={() => navigate('TodoDetails')} style={styles.taskContainer}>
     <Text style={styles.title}>Learn for math</Text>
     <Image
       style={styles.image}
       source={{ uri: 'https://media.os.fressnapf.com/cms/2020/04/Ratgeber-Rassenportrait-Mops_1200x527.jpg?t=cmsimg_920&f=webp' }} />
     <Text style={styles.localization}>Localization:</Text>
     <Text style={styles.date}>Date:</Text>
-  </View>;
+  </Pressable>;
 };
 const styles = StyleSheet.create({
   taskContainer: {
